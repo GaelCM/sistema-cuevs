@@ -9,10 +9,6 @@ export default function Sidebar(){
    const ruta=usePathname();
 
    const links = [
-      { name: 'Ventas', href: '/', 
-        icon: (isValid:boolean) =><svg className={`w-6 h-6 ${isValid?'text-white':'text-gray-500'} flex-shrink-0 group-hover:text-white transition duration-75`} fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-        <path d="M5 3a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2V5a2 2 0 00-2-2H5zM5 11a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2v-2a2 2 0 00-2-2H5zM11 5a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V5zM11 13a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path>
-     </svg> },
       {
         name: 'Dashboard', href: '/dashboard',
         icon: (isValid:boolean)=> <svg className={`w-6 h-6 ${isValid?'text-white':'text-gray-500'} flex-shrink-0 group-hover:text-white transition duration-75`} fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
@@ -37,7 +33,17 @@ export default function Sidebar(){
             <div className="flex-1 flex flex-col pt-5 pb-4 overflow-y-auto">
                <div className="flex-1 px-3 bg-white divide-y space-y-1">
 
-                  <ul className="space-y-6 pb-2">                               
+                  <ul className="space-y-6 pb-2">
+
+                        <li>
+                        <a href={"/"}  className={`text-base font-normal rounded-lg hover:bg-red-500 hover:text-white flex items-center p-2 group ${ruta=="/" ? 'bg-red-500 text-white' : 'text-gray-900'}`}>
+                           <svg className={`w-6 h-6 ${ruta=="/"?'text-white':'text-gray-500'} flex-shrink-0 group-hover:text-white transition duration-75`} fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                           <path d="M5 3a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2V5a2 2 0 00-2-2H5zM5 11a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2v-2a2 2 0 00-2-2H5zM11 5a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V5zM11 13a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path>
+                           </svg>
+                           <span className="ml-3 flex-1 whitespace-nowrap">Ventas</span>
+                        </a>
+                        </li>  
+
                      {links.map((link)=>(
                         <li key={link.name}>
                         <Link href={link.href}  className={`text-base font-normal rounded-lg hover:bg-red-500 hover:text-white flex items-center p-2 group ${ruta==link.href ? 'bg-red-500 text-white' : 'text-gray-900'}`}>

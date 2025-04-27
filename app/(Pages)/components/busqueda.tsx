@@ -5,6 +5,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import DialogProducto from "./DialogProducto";
 import React from "react";
+import { Producto } from "@/types/Productos";
 
 
 const busquedaSchema = z.object({
@@ -15,7 +16,7 @@ const busquedaSchema = z.object({
 
 
 export function Busqueda(){
-    const [producto, setProducto] = React.useState("");
+  const [producto, setProducto] = React.useState<Producto | null>(null);
     const [open, setOpen] = React.useState(false);
 
     const {register,handleSubmit,formState: { errors }} = useForm<z.infer<typeof busquedaSchema>>({
@@ -26,14 +27,16 @@ export function Busqueda(){
       })
 
       async function iniciarSesion(values: z.infer<typeof busquedaSchema>) {
-        const response= await fetch("https://catfact.ninja/fact")
-        if(!response.ok) {
-            setProducto("")
+        const url=`${process.env.NEXT_PUBLIC_API_URL}/api/productos/${values.producto}`;
+        const response= await fetch(url,)
+        if(response.status === 401){
+            setProducto(null)
+            setOpen(true)
         }else{
-            const data = await response.json()
-        console.log(values);
-        setProducto(data.fact);
-        setOpen(true);
+            const res = await response.json()
+            console.log(res.data);
+            setProducto(res.data);
+            setOpen(true);
         }
     
       }
@@ -48,7 +51,7 @@ export function Busqueda(){
             <input type="text" autoFocus className='w-full px-3 py-2 rounded-md focus:outline-none focus:border-blue-500 text-black' placeholder="Ingrese el código del producto"  {...register('producto')}  />
             {errors.producto && <p className="text-red-500 text-sm">{errors.producto.message}</p>}   
         </form>
-        <DialogProducto isOpen={open} onOpenChange={setOpen} value={producto} ></DialogProducto>
+        <DialogProducto isOpen={open} onOpenChange={setOpen} product={producto} ></DialogProducto>
         </>
     )
 }

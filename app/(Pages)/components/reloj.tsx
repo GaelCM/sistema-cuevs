@@ -43,7 +43,6 @@ export function Reloj() {
         {fechaFormateada.charAt(0).toUpperCase() + fechaFormateada.slice(1)}
       </p>
       <p className='text-2xl font-bold text-red-500 p-2'>{horaFormateada}</p>
-      
     </div>
   );
 }
