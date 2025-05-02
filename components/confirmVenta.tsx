@@ -47,7 +47,8 @@ export default function DialogConfirmVenta({isOpen, onOpenChange} :DialogConfirm
                 totalVenta: getTotalPrice(), 
                 idUsuario: 1, 
                 status: 1, 
-                productos: carrito // Asegúrate de que 'carrito' tenga la estructura correcta
+                productos: carrito, // Asegúrate de que 'carrito' tenga la estructura correcta,
+                pago: cambioEfectivo // Asegúrate de que 'cambioEfectivo' tenga la estructura correcta
             })
         })
         if(!res.ok){
@@ -127,7 +128,7 @@ export default function DialogConfirmVenta({isOpen, onOpenChange} :DialogConfirm
                 </DialogHeader>
                 <div>
                     <h1 className="text-4xl text-center pb-3">SU CAMBIO ES DE </h1>
-                    <h1 className="text-6xl font-bold text-center">{formatCurrency(cambioEfectivo - getTotalPrice())}</h1>
+                    <h1 className="text-6xl font-bold text-center">{formatCurrency(cambioEfectivo - getTotalPrice()>0?cambioEfectivo - getTotalPrice():0)}</h1>
                 </div>
                 <div className="flex flex-col items-center justify-center py-5">
                 <p className="text-md font-bold text-red-600 opacity-70 ">Folio venta: {folio}</p>

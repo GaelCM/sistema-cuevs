@@ -6,7 +6,7 @@ import { toZonedTime } from 'date-fns-tz';
 
 export class VentasClass{
 
-    static async nuevaVenta(totalVenta: number, idUsuario: number, status: number, productos: ProductoItem[]): Promise<NextResponse> { // O como función normal
+    static async nuevaVenta(totalVenta: number, idUsuario: number, status: number, productos: ProductoItem[], pago:number): Promise<NextResponse> { // O como función normal
      
         const timeZone = 'America/Mexico_City';
 
@@ -19,9 +19,16 @@ export class VentasClass{
 
             try {
             // Insertar en la tabla de ventas
+            let cambioVenta=0
+            if(!pago || pago < totalVenta){
+                cambioVenta=0
+            }else{
+                cambioVenta=pago - totalVenta
+            }
+           
             await tx.execute({
-                sql: 'INSERT INTO ventas (fechaVenta, totalVenta, idUsuario, idStatusVenta) VALUES (?, ?, ?, ?)',
-                args: [fechaFormateada, totalVenta, idUsuario, status],
+                sql: 'INSERT INTO ventas (fechaVenta, totalVenta, idUsuario, idStatusVenta, pagoVenta, cambioVenta) VALUES (?, ?, ?, ?, ?, ?)',
+                args: [fechaFormateada, totalVenta, idUsuario, status, pago, cambioVenta],
             });
 
             const ventaIdResult = await tx.execute(`SELECT last_insert_rowid() as idVenta`);

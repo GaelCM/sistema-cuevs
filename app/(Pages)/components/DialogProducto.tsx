@@ -51,11 +51,11 @@ export default function DialogProducto({product, isOpen, onOpenChange} :DialogPr
                   {/* Columna 2 y 3: Detalles */}
                   <div className=" w-[100%] flex flex-col items-center space-y-4">
                       {/* Nombre del Producto */}
-                      <h2 className="text-4xl underline font-bold text-red-700">{product.nombreProducto}</h2>
+                      <h2 className="text-6xl underline font-bold p-2">{product.nombreProducto}</h2>
 
                       {/* Precio */}
-                      <div className="flex items-center gap-2 bg-green-100 text-green-800 px-4 py-2 rounded-md">
-                          <span className="text-4xl font-extrabold">
+                      <div className="flex items-center gap-2 bg-green-100  px-4 py-2 rounded-md ">
+                          <span className="text-6xl font-extrabold">
                               {formatCurrency(product.precio)}
                           </span>
                       </div>
