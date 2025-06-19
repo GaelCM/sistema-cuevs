@@ -10,3 +10,14 @@ export async function GET(){
     }
 }
 
+
+export async function POST(request: Request) {
+    try {
+        const body = await request.json();
+        return ProductoClass.registrarProducto(body);
+    } catch (error) {
+        console.error("Error al registrar el producto:", error);
+        return new Response("Internal Server Error", { status: 500 });
+    }
+}
+

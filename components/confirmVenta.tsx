@@ -1,3 +1,4 @@
+"use client";
 
 import { useListaProductos } from "@/app/hooks/listaProductos";
 import { Button } from "@/components/ui/button";
@@ -5,6 +6,7 @@ import { Dialog, DialogContent,DialogDescription,DialogFooter, DialogHeader, Dia
 import { formatCurrency } from "@/lib/utils";
 import { EstadoVenta } from "@/types/ventas";
 import {Package} from "lucide-react";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "sonner";
 
@@ -18,6 +20,7 @@ type DialogConfirmProps ={
 export default function DialogConfirmVenta({isOpen, onOpenChange} :DialogConfirmProps) {
 
     const {carrito,getTotalPrice,clearCart}=useListaProductos()
+     const router=useRouter();
     const [cambioEfectivo, setCambioEfectivo] = useState(0); // Estado para manejar el cambio
     const [folio,setFolio]=useState(0) // Estado para manejar el folio de la venta
     const [estadoVenta, setEstadoVenta] = useState<EstadoVenta>("inicio");
@@ -61,6 +64,7 @@ export default function DialogConfirmVenta({isOpen, onOpenChange} :DialogConfirm
             setFolio(data.data) // Asigna el folio de la venta
             toast.success('Venta generada correctamente', {
                 description:`La venta se ha generado correctamente, FOLIO ${data.data}`,})
+            router.refresh()
         }
     }
 

@@ -13,3 +13,8 @@ export interface ProductoItem {
     product: Producto;
     quantity: number;
 }
+
+export type Categorias={
+    idCategoria: number;
+    categoriaName: string;
+}
