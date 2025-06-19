@@ -6,6 +6,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import DialogProducto from "./DialogProducto";
 import React from "react";
 import { Producto } from "@/types/Productos";
+import { getProducto } from "@/app/api/productosLocal/productosLocal";
 
 
 const busquedaSchema = z.object({
@@ -24,26 +25,23 @@ export function Busqueda(){
         defaultValues: {
           producto: "",
         },
-      })
+    })
 
-      async function iniciarSesion(values: z.infer<typeof busquedaSchema>) {
-        const url=`${process.env.NEXT_PUBLIC_API_URL}/api/productos/${values.producto}`;
-        const response= await fetch(url,)
-        if(response.status === 401){
-            setProducto(null)
+      const buscarProducto=async(values: z.infer<typeof busquedaSchema>)=>{
+        const res=await getProducto(values.producto)
+        if(res){
+            setProducto(res)
             setOpen(true)
         }else{
-            const res = await response.json()
-            console.log(res.data);
-            setProducto(res.data);
-            setOpen(true);
+            setProducto(null)
+            setOpen(true)
         }
-    
       }
+
 
     return(
         <>
-        <form onSubmit={handleSubmit(iniciarSesion)} className="bg-white rounded flex items-center p-4 shadow-sm border border-gray-200 ">
+        <form onSubmit={handleSubmit(buscarProducto)} className="bg-white rounded flex items-center p-4 shadow-sm border border-gray-200 ">
            
             <button className="outline-none focus:outline-none">
               <svg className="w-5 text-gray-600 h-5 cursor-pointer" fill="none" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" stroke="currentColor" viewBox="0 0 24 24"><path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>

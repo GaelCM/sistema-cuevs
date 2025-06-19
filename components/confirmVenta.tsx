@@ -1,5 +1,6 @@
 "use client";
 
+import { nuevaVenta } from "@/app/api/ventasLocal/ventasLocal";
 import { useListaProductos } from "@/app/hooks/listaProductos";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent,DialogDescription,DialogFooter, DialogHeader, DialogTitle, } from "@/components/ui/dialog";
@@ -25,7 +26,7 @@ export default function DialogConfirmVenta({isOpen, onOpenChange} :DialogConfirm
     const [folio,setFolio]=useState(0) // Estado para manejar el folio de la venta
     const [estadoVenta, setEstadoVenta] = useState<EstadoVenta>("inicio");
 
-    const nuevaVenta=()=>{
+    const reloadVenta=()=>{
         setEstadoVenta("inicio") // Reiniciar el estado de la venta
         clearCart() // Limpiar el carrito
         setCambioEfectivo(0) // Reiniciar el cambio
@@ -33,42 +34,31 @@ export default function DialogConfirmVenta({isOpen, onOpenChange} :DialogConfirm
     }
 
     const generarNuevaVenta=async()=>{
+
         if(carrito.length===0){
             onOpenChange(!isOpen) // Cerrar el diálogo si no hay productos en el carrito
             toast.error('NO HAY PRODUCTOS EN LA VENTA', {
                 description: 'Agrega productos al carrito antes de confirmar la venta.',})
             return
         }
+        
         setEstadoVenta("cargando"); // Iniciar loading
-        const url=`${process.env.NEXT_PUBLIC_API_URL}/api/ventas` // Asegúrate de que la URL sea correcta
-        const res=await fetch(url,{
-            method:"POST",
-            headers:{
-                "Content-Type":"application/json"
-            },
-            body:JSON.stringify({
-                totalVenta: getTotalPrice(), 
-                idUsuario: 1, 
-                status: 1, 
-                productos: carrito, // Asegúrate de que 'carrito' tenga la estructura correcta,
-                pago: cambioEfectivo // Asegúrate de que 'cambioEfectivo' tenga la estructura correcta
-            })
-        })
-        if(!res.ok){
+        const res=await nuevaVenta(getTotalPrice(),1,1,carrito,cambioEfectivo)
+
+        if(!res){
             console.log("Error al crear la venta")
             return
         }else{
-            const data=await res.json()
-            console.log(data) // Maneja la respuesta según sea necesario
+            console.log(res) // Maneja la respuesta según sea necesario
             setEstadoVenta("finalizado"); 
-            setFolio(data.data) // Asigna el folio de la venta
+            setFolio(res.data) // Asigna el folio de la venta
             toast.success('Venta generada correctamente', {
-                description:`La venta se ha generado correctamente, FOLIO ${data.data}`,})
+                description:`La venta se ha generado correctamente, FOLIO ${res.data}`,})
             router.refresh()
         }
     }
 
-
+    
 
     return(        
 
@@ -139,7 +129,7 @@ export default function DialogConfirmVenta({isOpen, onOpenChange} :DialogConfirm
                 </div>
                 <div className="flex justify-center">
                     <Button className="mt-6" onClick={() => {
-                        nuevaVenta();
+                        reloadVenta();
                         onOpenChange(false);
                     }}>
                         Finalizar venta 
