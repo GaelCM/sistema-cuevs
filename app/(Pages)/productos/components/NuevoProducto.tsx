@@ -4,10 +4,10 @@ import { Button } from "@/components/ui/button";
 import { CirclePlus } from "lucide-react";
 import { useState } from "react";
 import DialogNuevoProducto from "./DialogNuevoProducto";
-import { Categorias } from "@/types/Productos";
 
 
-export default function NuevoProductoSection({categorias}: {categorias: Categorias[]}){
+
+export default function NuevoProductoSection(){
 
     const [open, setOpen] = useState(false);
 
@@ -21,7 +21,10 @@ export default function NuevoProductoSection({categorias}: {categorias: Categori
         </Button>
         </div>
 
-        <DialogNuevoProducto open={open} onOpenChange={setOpen} categorias={categorias} ></DialogNuevoProducto>
+        <DialogNuevoProducto 
+            open={open} 
+            onOpenChange={setOpen} 
+        />
         </>
     )
 } 

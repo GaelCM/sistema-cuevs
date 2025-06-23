@@ -3,7 +3,7 @@ import type { NextConfig } from "next";
 const nextConfig: NextConfig = {
   /* config options here */
    // Añade esta línea:
-  output: 'export',
+  // output: 'export', // Comentado para permitir rutas dinámicas
   // Opcional: Si tienes problemas con rutas de imágenes después de exportar:
   images: {
     unoptimized: true,

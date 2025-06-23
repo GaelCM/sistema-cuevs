@@ -9,9 +9,12 @@ contextBridge.exposeInMainWorld('electronApi', {
     ///////////////////////////////
     getProductos: () => ipcRenderer.invoke('get-productos'),
     getProducto: (id) => ipcRenderer.invoke('get-producto', id),
-    addProducto: (producto) => ipcRenderer.invoke('add-producto', producto),
+    insertarProducto: (producto) => ipcRenderer.invoke('insertar-producto', producto),
+    updateProducto: (producto) => ipcRenderer.invoke('update-producto', producto),
     deleteProducto: (id) => ipcRenderer.invoke('delete-producto', id),
     ///////////////////////////////
     nuevaVenta: (totalVenta, idUsuario, status, productos, pago) => ipcRenderer.invoke('nueva-venta', totalVenta, idUsuario, status, productos, pago),
+    ///////////////////////////////
+    getCategorias: () => ipcRenderer.invoke('get-categorias'),  
    
   });

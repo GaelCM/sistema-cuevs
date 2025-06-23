@@ -9,8 +9,7 @@ const { toZonedTime } = require('date-fns-tz');
 function registerVentasController() {
 
     ipcMain.handle('nueva-venta', (event, totalVenta, idUsuario, status, productos, pago) => {
-
-      
+    
         const timeZone = 'America/Mexico_City';
         const now = new Date();
         const zonedDate = toZonedTime(now, timeZone);

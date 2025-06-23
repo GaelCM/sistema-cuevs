@@ -7,6 +7,7 @@ const isDev = process.env.NODE_ENV !== 'production';
 const { registerTestController } = require('./controllers/testController');
 const { registerProductosController } = require('./controllers/productosController');
 const { registerVentasController } = require('./controllers/ventasController');
+const { registerCategoriasController } = require('./controllers/categoriasController');
 
 
 function createWindow() {
@@ -48,6 +49,7 @@ app.whenReady().then(() => {
   registerTestController();
   registerProductosController();
   registerVentasController();
+  registerCategoriasController();
 
   app.on('activate', function () {
     // En macOS es común recrear una ventana en la aplicación cuando el

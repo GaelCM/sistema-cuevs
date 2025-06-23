@@ -1,5 +1,7 @@
 "use client";
 
+import { getCategoriasLocal } from "@/app/api/categoriasLocal/categoriasLocal";
+import { insertarProductoLocal } from "@/app/api/productosLocal/productosLocal";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
@@ -10,8 +12,7 @@ import { Categorias } from "@/types/Productos";
 import { EstadoVenta } from "@/types/ventas";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Package } from "lucide-react";
-import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
@@ -19,7 +20,6 @@ import { z } from "zod";
 type dialogProps={
     open:boolean,
     onOpenChange: (open: boolean) => void;
-    categorias:Categorias[]
 }
 
 const nuevoProductoForm = z.object({
@@ -42,10 +42,12 @@ const nuevoProductoForm = z.object({
     })
 })
 
-export default function DialogNuevoProducto({open, onOpenChange, categorias}: dialogProps) {
+export default function DialogNuevoProducto({open, onOpenChange}: dialogProps) {
 
     const [estado, setEstado] = useState<EstadoVenta>("inicio");
-     const router=useRouter();
+    const [categorias, setCategorias] = useState<Categorias[]>([]);
+
+
     const form = useForm<z.infer<typeof nuevoProductoForm>>({
         resolver: zodResolver(nuevoProductoForm),
         defaultValues: {
@@ -60,32 +62,37 @@ export default function DialogNuevoProducto({open, onOpenChange, categorias}: di
 
     const registrarProduto =async(values: z.infer<typeof nuevoProductoForm>)=> {
         setEstado("cargando"); // Iniciar loading
-        const url=`${process.env.NEXT_PUBLIC_API_URL}/api/productos`;
-        const response = await fetch(url,{
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-                idProducto: values.idProducto,
-                nombreProducto:values.nombreProducto,
-                precio: values.precio,
-                descripcion: values.descripcion,
-                idCategoria: parseInt(values.idCategoria),
-                idEstado: parseInt(values.idEstado)
-            }),
+        const response=await insertarProductoLocal({
+            idProducto: values.idProducto,
+            nombreProducto:values.nombreProducto,
+            precio: values.precio,
+            descripcion: values.descripcion || "",
+            idCategoria: parseInt(values.idCategoria),
+            idEstado: parseInt(values.idEstado)
         })
-        if(!response.ok){
-            console.log("Error al crear la venta")
+        if(!response?.success){
+            toast.error('Error al registrar el producto', {
+                description:`${response?.message}`,})
+            setEstado("inicio")
+            onOpenChange(false)
             return
         }else{
-            const data=await response.json()
-            console.log(data.data) // Maneja la respuesta según sea necesario
+            console.log(response.data) // Maneja la respuesta según sea necesario
             setEstado("finalizado"); 
-            toast.success('Venta generada correctamente', {
-                description:`La venta se ha generado correctamente, FOLIO ${data.data}`,})  
+            toast.success('Producto registrado correctamente', {
+                description:`El producto se ha registrado correctamente`,})  
         }
     }
+
+    useEffect(()=>{
+        const obtenerCategorias=async()=>{
+            const categos=await getCategoriasLocal()
+            if(categos){
+                setCategorias(categos)
+            }
+        }
+        obtenerCategorias()
+    },[])
 
     return (
         <Dialog open={open} onOpenChange={() => { onOpenChange(false) }}>
@@ -219,22 +226,21 @@ export default function DialogNuevoProducto({open, onOpenChange, categorias}: di
             )}
 
              {estado==="finalizado"&& (
-                <DialogContent className="sm:max-w-4xl">
+                <DialogContent className="sm:max-w-2xl">
                                 <DialogHeader className="p-6 pb-4 text-center">
                                     <DialogTitle className="text-4xl text-center text-green-500">
                                         ✅ Producto registrado correctamente
                                     </DialogTitle>
-                                    <DialogDescription className="text-xl text-center">El producto ha sido procesado con éxito.</DialogDescription>
+                                    
+                                    <DialogDescription className="text-xl text-center">Su producto ha sido procesado con éxito.</DialogDescription>
                                     
                                 </DialogHeader>
                                 <div className="flex justify-center">
-                                    <Button className="mt-6" onClick={()=>{                        
-                                        onOpenChange(false)
-                                        setEstado("inicio")
-                                        router.refresh()
-                                    }}>
-                                        Finalizar venta 
-                                    </Button>
+                                    <a href={"/productos"} className="mt-6">
+                                        <Button>
+                                            Finalizar
+                                        </Button>
+                                    </a>
                                 </div>
                 </DialogContent>
             )}

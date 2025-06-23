@@ -1,33 +1,23 @@
-import { Categorias } from "@/types/Productos";
+
 import NuevoProductoSection from "./components/NuevoProducto";
+import TablaDeProductos from "./components/TablaDeProductos";
 
-export default async function ProductosPage(){
-
-    const obtenerCategorias = async () => {
-        const url=`${process.env.NEXT_PUBLIC_API_URL}/api/categorias`;
-        const response = await fetch(url)
+export default function ProductosPage(){
     
-        if (!response.ok) {
-            throw new Error('Error al obtener las categorías');
-        }
-        const data = await response.json();
-        return data.data; 
-    }
-
-    const categorias:Categorias[] = await obtenerCategorias()
-
+   
     return(
         <>
         <div className="px-15 py-5 bg-white flex flex-col">
             <div className="flex justify-center">
-            <p className='text-4xl font-bold text-red-500 p-2'>
+            <p className='text-3xl font-bold text-red-500 p-2'>
                 Administre sus productos
             </p>
             </div>
-            <NuevoProductoSection categorias={categorias} ></NuevoProductoSection>
-            <section className="p-5">
-                <h1>LISTA DE PRODUCTOS</h1>
-            </section>    
+            <NuevoProductoSection  />
+            <section className="pt-5 pb-5">
+                <TablaDeProductos />
+            </section> 
+
         </div>
         </>
     )

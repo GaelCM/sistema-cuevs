@@ -1,4 +1,4 @@
-import { Producto, ProductoItem } from "@/types/Productos";
+import { Categorias, Producto, ProductoItem, ProductoResponse } from "@/types/Productos";
 import { Notes } from "@/types/test";
 import { VentaResponse } from "@/types/ventas";
 import { clsx, type ClassValue } from "clsx"
@@ -26,10 +26,13 @@ declare global {
         ///////////////////////////////
         getProductos: () => Promise<Producto[]>;
         getProducto: (id:string) => Promise<Producto>;
-        addProductos: (producto: Producto) => Promise<Producto>;
+        insertarProducto: (producto: Producto) => Promise<ProductoResponse>;
+        updateProducto: (producto: Producto) => Promise<ProductoResponse>;
         deleteProductos: (id: number) => Promise<{ id: number }>;
         ///////////////////////////////
         nuevaVenta: (totalVenta: number, idUsuario: number, status: number, productos: ProductoItem[], pago:number) => Promise<VentaResponse>;
+        ///////////////////////////////
+        getCategorias: () => Promise<Categorias[]>;
       };
     }
   }
