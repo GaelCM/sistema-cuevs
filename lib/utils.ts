@@ -1,6 +1,6 @@
 import { Categorias, Producto, ProductoItem, ProductoResponse } from "@/types/Productos";
 import { Notes } from "@/types/test";
-import { VentaResponse } from "@/types/ventas";
+import { Venta, VentaResponse, DetalleVenta } from "@/types/ventas";
 import { clsx, type ClassValue } from "clsx"
 import { twMerge } from "tailwind-merge"
 
@@ -28,11 +28,15 @@ declare global {
         getProducto: (id:string) => Promise<Producto>;
         insertarProducto: (producto: Producto) => Promise<ProductoResponse>;
         updateProducto: (producto: Producto) => Promise<ProductoResponse>;
-        deleteProductos: (id: number) => Promise<{ id: number }>;
+        deleteProducto: (id: string) => Promise<{success:boolean, message:string}>;
         ///////////////////////////////
         nuevaVenta: (totalVenta: number, idUsuario: number, status: number, productos: ProductoItem[], pago:number) => Promise<VentaResponse>;
         ///////////////////////////////
         getCategorias: () => Promise<Categorias[]>;
+        ///////////////////////////////
+        reporteVentas: (fechaDesde: string, fechaHasta: string) => Promise<Venta[]>;
+        detalleVenta: (idVenta: string) => Promise<DetalleVenta[]>;
+
       };
     }
   }

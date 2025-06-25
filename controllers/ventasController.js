@@ -69,6 +69,35 @@ function registerVentasController() {
           };
         }
       });
+
+    ipcMain.handle('reporte-ventas', (event, fechaDesde, fechaHasta) => {
+        const ventas = db.prepare('SELECT * FROM ventas WHERE DATE(fechaVenta) BETWEEN ? AND ?').all(fechaDesde, fechaHasta);
+        return ventas; 
+      });  
+
+    ipcMain.handle('detalle-venta', (event, idVenta) => {
+        const detalles = db.prepare(`
+            SELECT 
+                v.idVenta,
+                v.fechaVenta,
+                v.totalVenta,
+                v.pagoVenta,
+                v.cambioVenta,
+                v.idUsuario,
+                v.idStatusVenta,
+                p.nombreProducto,
+                dv.cantidadProducto,
+                dv.precioUnitario,
+                dv.subtotal,
+                p.descripcion
+            FROM ventas v
+            INNER JOIN detalleVentas dv ON v.idVenta = dv.idVenta
+            INNER JOIN productos p ON dv.idProducto = p.idProducto
+            WHERE v.idVenta = ?
+            ORDER BY p.nombreProducto
+        `).all(idVenta);
+        return detalles;
+    });
 }
 
 module.exports = { registerVentasController };

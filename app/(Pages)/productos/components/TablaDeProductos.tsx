@@ -17,7 +17,9 @@ import { Input } from "@/components/ui/input";
 import { useEffect, useState } from "react";
 import { Pagination, PaginationContent, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from "@/components/ui/pagination";
 import Link from "next/link";
-import { getProductosLocal } from "@/app/api/productosLocal/productosLocal";
+import { eliminarProducto, getProductosLocal } from "@/app/api/productosLocal/productosLocal";
+import { toast } from "sonner";
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 
 
 
@@ -28,12 +30,28 @@ export default function TablaDeProductos(){
     const [searchTerm, setSearchTerm] = useState('');
     const [filteredProducts, setFilteredProducts] = useState<Producto[]>([]);
     const [currentPage, setCurrentPage] = useState(1);
+    const [openConfirm, setOpenConfirm] = useState(false);
+    const [productoAEliminar, setProductoAEliminar] = useState<string | null>(null);
 
     const obtenerProductos = async () => {
         const productos = await getProductosLocal();
         if (productos) {
             setProductos(productos);
         }
+    }
+
+    const deleteProductos = async (idProducto:string) => {
+        
+            const response=await eliminarProducto(idProducto)
+            if(!response?.success){
+                toast.error('Error al eliminar el producto', {
+                    description:`${response?.message}`,})
+            }else{
+                toast.success('Producto eliminado correctamente', {
+                    description:`El producto se ha eliminado correctamente`,})
+                    obtenerProductos()
+            }
+        
     }
 
     // useEffect para obtener productos solo al montar el componente
@@ -115,7 +133,14 @@ export default function TablaDeProductos(){
                                             </Button>
                                         </Link>
                                         
-                                        <Button size="icon" variant="destructive">
+                                        <Button
+                                            size="icon"
+                                            variant="destructive"
+                                            onClick={() => {
+                                                setProductoAEliminar(producto.idProducto);
+                                                setOpenConfirm(true);
+                                            }}
+                                        >
                                             <Trash2 className="h-4 w-4" />
                                         </Button>
                                     </div>
@@ -169,6 +194,34 @@ export default function TablaDeProductos(){
                     </PaginationContent>
                 </Pagination>
             </CardFooter>
+
+            <Dialog open={openConfirm} onOpenChange={setOpenConfirm}>
+                <DialogContent>
+                    <DialogHeader>
+                        <DialogTitle>¿Eliminar producto?</DialogTitle>
+                        <DialogDescription>
+                            ¿Estás seguro de que deseas eliminar este producto? Esta acción no se puede deshacer.
+                        </DialogDescription>
+                    </DialogHeader>
+                    <DialogFooter>
+                        <Button variant="outline" onClick={() => setOpenConfirm(false)}>
+                            Cancelar
+                        </Button>
+                        <Button
+                            variant="destructive"
+                            onClick={async () => {
+                                if (productoAEliminar) {
+                                    await deleteProductos(productoAEliminar);
+                                    setOpenConfirm(false);
+                                    setProductoAEliminar(null);
+                                }
+                            }}
+                        >
+                            Eliminar
+                        </Button>
+                    </DialogFooter>
+                </DialogContent>
+            </Dialog>
         </Card>
     )
 }

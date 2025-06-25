@@ -15,6 +15,7 @@ function createWindow() {
   const mainWindow = new BrowserWindow({
     width: 800,
     height: 600,
+    icon: path.join(__dirname, 'app/assets/mascota.png'),
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'), // Opcional: si necesitas script de precarga
       // Importante por seguridad, pero puede complicar la comunicación inicial:

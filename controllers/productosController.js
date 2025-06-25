@@ -18,7 +18,7 @@ function registerProductosController() {
 
     ipcMain.handle('insertar-producto', (event, producto) => {
         const stmtCheck = db.prepare('SELECT * FROM productos WHERE idProducto = ?');
-        const productoExistente = stmtCheck.get(producto.idProducto);
+        const productoExistente = stmtCheck.get(producto.idProducto); //el get es para obtener un solo resultado de la consulta y el all es para obtener todos los resultados de la consulta
 
         if (productoExistente) {
             return {
@@ -48,9 +48,20 @@ function registerProductosController() {
     });
 
     ipcMain.handle('delete-producto', (event, id) => {
-        const stmt = db.prepare('DELETE FROM productos WHERE id = ?');
+        const stmt = db.prepare('DELETE FROM productos WHERE idProducto = ?');
         const res = stmt.run(id);
-        return res;
+        if(res.changes===0){
+            return {
+                success: false,
+                message: 'Producto no eliminado',
+                data: res
+            };
+        }
+        return {
+            success: true,
+            message: 'Producto eliminado correctamente',
+            data: res
+        };
     });
     
     

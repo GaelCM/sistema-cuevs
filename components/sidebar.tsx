@@ -2,11 +2,13 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useState } from "react";
 
 
 export default function Sidebar(){
 
    const ruta=usePathname();
+   const [openReportes, setOpenReportes] = useState(false);
 
    const links = [
       {
@@ -51,7 +53,34 @@ export default function Sidebar(){
                            <span className="ml-3 flex-1 whitespace-nowrap">{link.name}</span>
                         </Link>
                         </li>      
-                     ))}                
+                     ))}
+                     
+                     {/* Menú Reportes con submenú */}
+                     <li>
+                       <button
+                         type="button"
+                         onClick={() => setOpenReportes((prev) => !prev)}
+                         className={`text-base font-normal w-full rounded-lg hover:bg-red-500 hover:text-white flex items-center p-2 group ${ruta=="/reportes" ? 'bg-red-500 text-white' : 'text-gray-900'}`}
+                       >
+                         <svg className="w-6 h-6 text-gray-500 flex-shrink-0 group-hover:text-white transition duration-75" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                           <path fillRule="evenodd" d="M3 4a1 1 0 011-1h12a1 1 0 011 1v12a1 1 0 01-1 1H4a1 1 0 01-1-1V4zm2 2v8h10V6H5zm2 2h6v4H7V8z" clipRule="evenodd"></path>
+                         </svg>
+                         <span className="ml-3 whitespace-nowrap">Reportes</span>
+                         <svg className={`w-4 h-4 ml-auto transition-transform duration-200 ${openReportes ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                           <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+                         </svg>
+
+                       </button>
+                       {openReportes && (
+                         <ul className="pl-10 py-1 space-y-1">
+                           <li>
+                             <Link href="/reportes/mis-ventas" className="block px-2 py-2 text-gray-700 hover:bg-red-500 hover:text-white rounded-lg">
+                               Mis ventas
+                             </Link>
+                           </li>
+                         </ul>
+                       )}
+                     </li>
                   </ul>
 
                   <div className="space-y-6 pt-4">

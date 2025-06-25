@@ -52,4 +52,13 @@ export const actualizarProducto= async (producto:Producto) => {
   }
 }
 
-
+export const eliminarProducto= async (idProducto:string) => {
+  if (isClient && window.electronApi?.deleteProducto) {
+    const res = await window.electronApi.deleteProducto(idProducto);
+    if (!res?.success) {
+      console.log("Producto no eliminado:", res);
+      return null
+    }
+    return res 
+  }
+}

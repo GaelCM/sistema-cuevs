@@ -63,8 +63,8 @@
     "wait-on": "^8.0.3"
   },
   "build": {
-    "appId": "com.ejemplo.miappelectron",
-    "productName": "MiAppElectron",
+    "appId": "com.ejemplo.sistemacuevs",
+    "productName": "Sistema Cuevs",
     "files": [
       "out/**/*",
       "main.js",
@@ -76,7 +76,7 @@
     },
     "win": {
       "target": "nsis",
-      "icon": "ruta/a/tu/icono.ico"
+      "icon": "./assets/mascota.png"
     },
     "extraMetadata": {
       "main": "main.js"
