@@ -1,3 +1,5 @@
+// eslint-disable-next-line @typescript-eslint/no-require-imports
+require('dotenv').config();
 /* eslint-disable @typescript-eslint/no-require-imports */
 // main.js
 const { app, BrowserWindow } = require('electron');
@@ -8,6 +10,7 @@ const { registerTestController } = require('./controllers/testController');
 const { registerProductosController } = require('./controllers/productosController');
 const { registerVentasController } = require('./controllers/ventasController');
 const { registerCategoriasController } = require('./controllers/categoriasController');
+const { authenticationController } = require('./controllers/authenticationController');
 
 
 function createWindow() {
@@ -47,6 +50,7 @@ function createWindow() {
 // Algunas APIs pueden usarse solo después de que ocurra este evento.
 app.whenReady().then(() => {
   createWindow();
+  authenticationController();
   registerTestController();
   registerProductosController();
   registerVentasController();

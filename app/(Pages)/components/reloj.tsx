@@ -9,7 +9,7 @@ export function Reloj() {
     // Establece un intervalo para actualizar la fecha cada segundo (1000 ms)
     const timerId = setInterval(() => {
       setFechaActual(new Date());
-    }, 1000);
+    }, 1);
 
     // Función de limpieza: se ejecuta cuando el componente se desmonta
     // Es crucial para evitar fugas de memoria (memory leaks)
@@ -26,15 +26,15 @@ export function Reloj() {
     month: 'long', // 'abril'
     day: 'numeric', // '7'
   };
-   const opcionesHora: Intl.DateTimeFormatOptions = {
-     hour: '2-digit', // '14'
-     minute: '2-digit', // '29'
-     second: '2-digit', // '16'
-     hour12: false // Formato de 24 horas (puedes poner true para AM/PM)
-  };
+  // const opcionesHora: Intl.DateTimeFormatOptions = {
+  //   hour: '2-digit', // '14'
+  //   minute: '2-digit', // '29'
+  //   second: '2-digit', // '16'
+  //   hour12: false // Formato de 24 horas (puedes poner true para AM/PM)
+  // };
 
   const fechaFormateada = fechaActual.toLocaleDateString('es-MX', opcionesFecha);
-  const horaFormateada = fechaActual.toLocaleTimeString('es-MX', opcionesHora);
+  // const horaFormateada = fechaActual.toLocaleTimeString('es-MX', opcionesHora);
 
   return (
     <div className='text-center'>
@@ -42,7 +42,9 @@ export function Reloj() {
         {/* Capitaliza la primera letra del día */}
         {fechaFormateada.charAt(0).toUpperCase() + fechaFormateada.slice(1)}
       </p>
+      {/*
       <p className='text-2xl font-bold text-red-500 p-2'>{horaFormateada}</p>
+      */}
     </div>
   );
 }

@@ -20,5 +20,6 @@ contextBridge.exposeInMainWorld('electronApi', {
     reporteVentas: (fechaDesde, fechaHasta) => ipcRenderer.invoke('reporte-ventas', fechaDesde, fechaHasta),
     detalleVenta: (idVenta) => ipcRenderer.invoke('detalle-venta', idVenta),
     ///////////////////////////////
-   
+    login: (username, password) => ipcRenderer.invoke('login', username, password),
+    ///////////////////////////////
   });

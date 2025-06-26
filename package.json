@@ -26,12 +26,16 @@
     "@radix-ui/react-slot": "^1.2.3",
     "@radix-ui/react-tooltip": "^1.1.8",
     "@types/mssql": "^9.1.7",
+    "bcryptjs": "^3.0.2",
     "better-sqlite3": "^11.10.0",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "cookie": "^1.0.2",
     "date-fns": "^4.1.0",
     "date-fns-tz": "^3.2.0",
+    "dotenv": "^16.6.0",
+    "js-cookie": "^3.0.5",
+    "jsonwebtoken": "^9.0.2",
     "lucide-react": "^0.487.0",
     "mssql": "^11.0.1",
     "mysql2": "^3.14.0",
@@ -48,6 +52,7 @@
   "devDependencies": {
     "@eslint/eslintrc": "^3",
     "@tailwindcss/postcss": "^4",
+    "@types/js-cookie": "^3.0.6",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
@@ -76,7 +81,7 @@
     },
     "win": {
       "target": "nsis",
-      "icon": "./assets/mascota.png"
+      "icon": "./app/assets/mascota.png"
     },
     "extraMetadata": {
       "main": "main.js"

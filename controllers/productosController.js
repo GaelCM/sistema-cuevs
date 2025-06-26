@@ -18,7 +18,8 @@ function registerProductosController() {
 
     ipcMain.handle('insertar-producto', (event, producto) => {
         const stmtCheck = db.prepare('SELECT * FROM productos WHERE idProducto = ?');
-        const productoExistente = stmtCheck.get(producto.idProducto); //el get es para obtener un solo resultado de la consulta y el all es para obtener todos los resultados de la consulta
+        const productoExistente = stmtCheck.get(producto.idProducto); //el get es para obtener un solo resultado de la consulta y el all es para obtener todos los resultados de la consulta y 
+        //lo que esta dentro del get es el idProducto que se esta pasando por el producto esto
 
         if (productoExistente) {
             return {

@@ -1,10 +1,17 @@
+"use client";
 /* eslint-disable @next/next/no-img-element */
 import { Button } from "./ui/button";
 
 import logo from "../app/assets/logo.png"
 import mascota from "../app/assets/mascota.png"
+import { useRouter } from "next/navigation";
+import Cookies from "js-cookie";
+import { useUserData } from "@/app/hooks/globalUser";
 
 export default function Navbar(){
+    const router = useRouter();
+
+    const { user } = useUserData();
 
     return(
         <nav className="bg-white border-b border-gray-200 fixed z-30 w-full">
@@ -30,8 +37,8 @@ export default function Navbar(){
                   <div className="hidden lg:flex flex-grow items-center justify-center">
                     <img src={mascota.src} className="h-20 mr-2" alt="Windster Logo"/>
                     <img src={logo.src} className="h-20 mr-2" alt="Windster Logo"/> 
-                    
                   </div>
+                  <span className="mr-10 font-semibold text-gray-700">Bienvenido {user.nombre} {user.apellidos}</span>
                   <button id="toggleSidebarMobileSearch" type="button" className="hidden text-gray-500 hover:text-gray-900 hover:bg-gray-100 p-2 rounded-lg">
                       <span className="sr-only">Search</span>
                       <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
@@ -39,7 +46,10 @@ export default function Navbar(){
                       </svg>
                   </button>
                   
-                  <Button className="bg-red-500 hover:bg-rose-400 cursor-pointer">Cerrar sesion</Button>
+                  <Button className="bg-red-500 hover:bg-rose-400 cursor-pointer" onClick={()=>{
+                    Cookies.remove('token');
+                    router.push('/login');
+                  }}>Cerrar sesion</Button>
 
                 </div>
                 
